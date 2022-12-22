@@ -1,0 +1,12 @@
+trigger:
+  - main
+pool:
+  vmImage: ubuntu-latest
+steps:
+  - task: Docker@2
+    inputs:
+      command: 'buildAndPush'
+      Dockerfile: './Dockerfile'
+      containerRegistry: DockerHub
+      repository: anasansarii/saleor
+      tags: azdev
