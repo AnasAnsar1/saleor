@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('vcs') {
             steps {
-                git branch: 'main', url:'https://github.com/AnasAnsar1/saleor.git'
+                git branch: 'dev', url:'https://github.com/AnasAnsar1/saleor.git'
             }
         }
         stage('Image_build') {
