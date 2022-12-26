@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: PersistantVolumeClaim
+metadata:
+  name: data-claim
+  namespace: dev
+spec:
+  storageClassName: managed-premium
+  accessModes: ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistantVolumeClaim
+metadata:
+  name: replica-claim
+  namespace: dev
+spec:
+  storageClassName: managed-premium
+  accessModes: ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-pod
+  labels:
+    env: dev
+    app: db
+  namespace: dev
+spec:
+  containers:
+    - name: db-container
+      image: library/postgres:13-alpine
+      env:
+        - name: POSTGRES_USER
+          value: saleor
+        - name: POSTGRES_PASSWORD
+          value: saleor
+      ports:
+        - containerPort: 5432
+      volumeMounts:
+        - name: data-vol
+          mountPath: /var/lib/postgresql/data
+        - name: replica-vol
+          mountPath: /docker-entrypoint-initdb.d/replica_user.sql
+  volumes:
+    - name: data-vol
+      persistentVolumeClaim:
+        claimName: data-claim
+    - name: replica-vol
+      persistentVolumeClaim:
+        claimName: replica-claim

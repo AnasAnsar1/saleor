@@ -1,0 +1,88 @@
+---
+apiVersion: v1
+kind: PersistantVolumeClaim
+metadata:
+  name: saleor-claim
+  namespace: dev
+spec:
+  storageClassName: managed-premium
+  accessModes: ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistantVolumeClaim
+metadata:
+  name: templates-claim
+  namespace: dev
+spec:
+  storageClassName: managed-premium
+  accessModes: ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistantVolumeClaim
+metadata:
+  name: tests-claim
+  namespace: dev
+spec:
+  storageClassName: managed-premium
+  accessModes: ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saleor-deployment
+  labels:
+    env: dev
+    app: saleor
+  namespace: dev
+spec:
+  minReadySeconds: 20
+  replicas: 2
+  selector:
+    matchLabels:
+      app: saleor
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25
+      maxUnavailable: 25
+  template:
+    metadata:
+      name: saleor
+      labels:
+        app: saleor
+        env: dev
+      namespace: dev
+    spec:
+      containers:
+        - name: saleor
+          image: anasansarii/saleor:azdev
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: saleor-vol
+              mountPath: /app/saleor
+            - name: templates-vol
+              mountPath: /app/templates
+            - name: tests-vol
+              mountPath: /app/tests
+          command: ["python","manage.py","runserver","0.0.0.0:8000"]
+      volumes:
+        - name: saleor-vol
+          persistentVolumeClaim:
+            claimName: saleor-claim
+        - name: templates-vol
+          persistentVolumeClaim:
+            claimName: templates-claim
+        - name: tests-vol
+          persistentVolumeClaim:
+            claimName: tests-claim
