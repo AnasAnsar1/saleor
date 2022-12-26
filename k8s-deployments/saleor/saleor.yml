@@ -1,12 +1,13 @@
 ---
 apiVersion: v1
-kind: PersistantVolumeClaim
+kind: PersistentVolumeClaim
 metadata:
-  name: saleor-claim
+  name: saleorclaim
   namespace: dev
 spec:
   storageClassName: managed-premium
-  accessModes: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
@@ -14,11 +15,12 @@ spec:
 apiVersion: v1
 kind: PersistantVolumeClaim
 metadata:
-  name: templates-claim
+  name: templatesclaim
   namespace: dev
 spec:
   storageClassName: managed-premium
-  accessModes: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
@@ -26,11 +28,12 @@ spec:
 apiVersion: v1
 kind: PersistantVolumeClaim
 metadata:
-  name: tests-claim
+  name: testsclaim
   namespace: dev
 spec:
   storageClassName: managed-premium
-  accessModes: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
@@ -79,10 +82,10 @@ spec:
       volumes:
         - name: saleor-vol
           persistentVolumeClaim:
-            claimName: saleor-claim
+            claimName: saleorclaim
         - name: templates-vol
           persistentVolumeClaim:
-            claimName: templates-claim
+            claimName: templatesclaim
         - name: tests-vol
           persistentVolumeClaim:
-            claimName: tests-claim
+            claimName: testsclaim

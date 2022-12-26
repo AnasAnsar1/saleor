@@ -6,7 +6,8 @@ metadata:
   namespace: dev
 spec:
   storageClassName: managed-premium
-  accessModes: ReadWriteOnce
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
