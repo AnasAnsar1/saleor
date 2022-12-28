@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
         - name: saleor
-          image: anasansarii/saleor:azdev
+          image: anasansarii/saleor:jnkdev
           ports:
             - containerPort: 8000
               protocol: TCP
