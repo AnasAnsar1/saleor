@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Image_push') {
             steps {
-                sh 'docker push anasansarii/saleor:jnkdev'
+                sh 'docker image push anasansarii/saleor:jnkdev'
             }
         }
     }
