@@ -1,5 +1,5 @@
 pipeline {
-    agent { label "build_push" }
+    agent any
     stages {
         stage('vcs') {
             steps {
